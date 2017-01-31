@@ -1,16 +1,82 @@
 import React from 'react';
 var EventElements = require('./Event_Elements.js');
 
-var zoomLevel = 100;
+var zoomLevel = 40;
+var oneDayView = [];
+var threeDayView = [];
+var twoDayView = [];
+var oneWeekView = [];
+var twoWeekView = [];
+
+function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+
+const element = <Welcome name="Sara" />;
+ReactDOM.render(
+  element,
+  document.getElementById('root')
+);
+
+
+function StandardBox(props) {
+  return (
+    <div className={props.boxCode}
+    />
+  );
+}
+
+
+ = React.createClass({
+render: function() {
+    return (
+      <div style={this.props.direction}></div>
+    );
+  }
+});
+
+var MainView = React.createClass({
+  render: function() {
+    oneDayView.push(standardBox{direction = column});
+    threeDayView.push(standardBox{direction = column});
+    return (
+      <div style={this.props.direction}></div>
+    );
+  }
+});
+
+
+
+
+
+mainView.push({standardBox});
 
 var renderMatrix = [
-[1,80],
-[2,60],
+[1,0],
+[2,20],
 [3,40],
-[4,30],
-[5,20],
-[6,10],
+[4,60],
+[5,80],
+[6,100],
 ];
+
+
+
+
+
+
+var MainView = React.createClass({
+  render: function() {
+    if (zoomLevel > renderMatrix[0,1] && eventSpan[i] < daySpan[1]) {
+      mainView.push(eventSpan[i]);
+    }
+  };
+  return (
+    <div>
+    </div>
+  );
+});
+
 
 var inFull = [];
 var inTwo = [];
@@ -45,25 +111,8 @@ zoom: function(e) {
  }
 };
 
-var standardBox = React.createClass({
-render: function() {
-    return (
-      <div style={this.props.direction}></div>
-    );
-  }
-});
 
-var MainView = React.createClass({
-  render: function() {
-    if (zoomLevel > daySpan[0] && eventSpan[i] < daySpan[1]) {
-      renderSpan.push(eventSpan[i]);
-    }
-  };
-    return (
-      <div>
-      </div>
-    );
-});
+
 
 
 function CreateRender(){
