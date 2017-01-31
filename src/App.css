@@ -1,10 +1,19 @@
 .App {
-  text-align: center;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: column;
+  width: vw;
+  height: inherit;
 }
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+  height: 20px;
+}
+
+.User-logo {
+  height: 30px;
+  border-radius: 100%;
 }
 
 .App-header {
