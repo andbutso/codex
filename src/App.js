@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 var PageHeader = require('./Header/Header.js');
-var PageBody = require('./Body/Body.js');
 var MainFullView = require('./Body/ViewGenerator.js');
 
 class App extends Component {
