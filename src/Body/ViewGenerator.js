@@ -1,6 +1,6 @@
 import React from 'react';
 var FullChassis = require('./Day.js');
-var zoomLevel = 19;
+var zoomLevel = 75;
 var genericStyle = {
   height: "100%",
   width: "100%",
@@ -15,7 +15,8 @@ var OneDay = React.createClass({
     var specificStyle = {
       textAlign: 'center',
       display:"inline-flex",
-      flexDirection:'column'
+      flexDirection:'column',
+      flex: this.props.flexLevel
     };
     return(
       <div style={Object.assign(genericStyle, specificStyle)}>
@@ -28,46 +29,69 @@ var OneDay = React.createClass({
 
 var ThreeDay = React.createClass({
   render: function(){
+    var sendFlex = 20 / Math.min(Math.max(80 - zoomLevel, 0), 20);
     var specificStyle = {
       display:"inline-flex",
-      flexDirection:'row'
+      flexDirection:'row',
+      flex: this.props.flexLevel
     };
     return(
       <div style={Object.assign(genericStyle, specificStyle)}>
-        <OneDay/>
-        <OneDay/>
-        <OneDay/>
+      <OneDay flexLevel = "1"/>
+      <OneDay flexLevel = {sendFlex}/>
+      <OneDay flexLevel = "1"/>
       </div>
     );
   }
 });
 
-var TwoDay = React.createClass({
+var TwoDayL = React.createClass({
   render: function(){
+    var sendFlex = 20 / Math.min(Math.max(60 - zoomLevel, 0), 20);
     var specificStyle = {
       display:"inline-flex",
-      flexDirection:'row'
+      flexDirection:'row',
+      flex: this.props.flexLevel
     };
     return(
       <div style={Object.assign(genericStyle, specificStyle)}>
-        <OneDay/>
-        <OneDay/>
+        <OneDay flexLevel = "1"/>
+        <OneDay flexLevel = {sendFlex}/>
+      </div>
+    );
+  }
+});
+
+var TwoDayR = React.createClass({
+  render: function(){
+    var sendFlex = 20 / Math.min(Math.max(60 - zoomLevel, 0), 20);
+    var specificStyle = {
+      display:"inline-flex",
+      flexDirection:'row',
+      flex: this.props.flexLevel
+    };
+    return(
+      <div style={Object.assign(genericStyle, specificStyle)}>
+        <OneDay flexLevel = {sendFlex}/>
+        <OneDay flexLevel = "1"/>
       </div>
     );
   }
 });
 
 var OneWeek = React.createClass({
-  render: function(){
+  render: function(props){
+    var sendFlex = 3 * 20 / Math.min(Math.max(60 - zoomLevel, 0), 20);
     var specificStyle = {
       display:"inline-flex",
-      flexDirection:'row'
+      flexDirection:'row',
+      flex: this.props.flexLevel
     };
     return(
       <div style={Object.assign(genericStyle, specificStyle)}>
-        <TwoDay/>
-        <ThreeDay/>
-        <TwoDay/>
+        <TwoDayL flexLevel = "2"/>
+        <ThreeDay flexLevel = {sendFlex}/>
+        <TwoDayR flexLevel = "2"/>
       </div>
     );
   }
@@ -75,14 +99,16 @@ var OneWeek = React.createClass({
 
 var TwoWeek = React.createClass({
   render: function(){
+    var sendFlex = 20 / Math.min(Math.max(40 - zoomLevel, 0), 20);
     var specificStyle = {
       display:"inline-flex",
-      flexDirection:'column'
+      flexDirection:'column',
+      flex: this.props.flexLevel
     };
     return(
       <div style={Object.assign(genericStyle, specificStyle)}>
-        <OneWeek/>
-        <OneWeek/>
+      <OneWeek flexLevel = {sendFlex}/>
+      <OneWeek flexLevel = "1"/>
       </div>
     );
   }
@@ -90,6 +116,7 @@ var TwoWeek = React.createClass({
 
 var MainFullView = React.createClass({
   render: function(){
+    var sendFlex = 20 / Math.max(20 - zoomLevel,0);
     var mainContainerStyle = {
       padding: 10,
       height: "80vh",
@@ -103,8 +130,8 @@ var MainFullView = React.createClass({
     if (zoomLevel < 20) {
       return (
         <div style={mainContainerStyle}>
-          <TwoWeek/>
-          <TwoWeek/>
+          <TwoWeek flexLevel = {sendFlex}/>
+          <TwoWeek flexLevel = "1"/>
         </div>
       );
     } else if (zoomLevel >= 20 && zoomLevel < 40) {
