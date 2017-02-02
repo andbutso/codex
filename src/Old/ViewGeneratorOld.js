@@ -2,7 +2,9 @@ import React from 'react';
 
 var FullChassis = require('./Day.js');
 var ScrollingApp = require('./Controls/ScrollControl.js');
+var WheelingApp = require('./Controls/WheelControl.js');
 var KeyingApp = require('./Controls/KeyControl.js');
+
 var zoomLevel = 0;
 
 var genericStyle = {
@@ -14,11 +16,8 @@ var genericStyle = {
   borderWidth: 1
 };
 
-class OneDay extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+var OneDay = React.createClass({
+  render: function(){
     var specificStyle = {
       textAlign: 'center',
       display:"inline-flex",
@@ -27,18 +26,15 @@ class OneDay extends React.Component {
     };
     return(
       <div style={Object.assign(genericStyle, specificStyle)}>
-        {this.props.flexLevel}
-        {zoomLevel}
+        <WheelingApp/>
       </div>
     );
   }
-}
+});
 
-class ThreeDay extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+
+var ThreeDay = React.createClass({
+  render: function(){
     var sendFlex = 20 / Math.min(Math.max(80 - zoomLevel, 0), 20);
     var specificStyle = {
       display:"inline-flex",
@@ -47,19 +43,16 @@ class ThreeDay extends React.Component {
     };
     return(
       <div style={Object.assign(genericStyle, specificStyle)}>
-      <OneDay flexLevel="1"/>
-      <OneDay flexLevel={sendFlex}/>
-      <OneDay flexLevel="1"/>
+      <OneDay flexLevel = "1"/>
+      <OneDay flexLevel = {sendFlex}/>
+      <OneDay flexLevel = "1"/>
       </div>
     );
   }
-}
+});
 
-class TwoDayL extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+var TwoDayL = React.createClass({
+  render: function(){
     var sendFlex = 20 / Math.min(Math.max(60 - zoomLevel, 0), 20);
     var specificStyle = {
       display:"inline-flex",
@@ -68,18 +61,15 @@ class TwoDayL extends React.Component {
     };
     return(
       <div style={Object.assign(genericStyle, specificStyle)}>
-        <OneDay flexLevel="1"/>
-        <OneDay flexLevel={sendFlex}/>
+        <OneDay flexLevel = "1"/>
+        <OneDay flexLevel = {sendFlex}/>
       </div>
     );
   }
-}
+});
 
-class TwoDayR extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+var TwoDayR = React.createClass({
+  render: function(){
     var sendFlex = 20 / Math.min(Math.max(60 - zoomLevel, 0), 20);
     var specificStyle = {
       display:"inline-flex",
@@ -88,18 +78,15 @@ class TwoDayR extends React.Component {
     };
     return(
       <div style={Object.assign(genericStyle, specificStyle)}>
-        <OneDay flexLevel={sendFlex}/>
-        <OneDay flexLevel="1"/>
+        <OneDay flexLevel = {sendFlex}/>
+        <OneDay flexLevel = "1"/>
       </div>
     );
   }
-}
+});
 
-class OneWeek extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+var OneWeek = React.createClass({
+  render: function(props){
     var sendFlex = 3 * 20 / Math.min(Math.max(60 - zoomLevel, 0), 20);
     var specificStyle = {
       display:"inline-flex",
@@ -108,19 +95,16 @@ class OneWeek extends React.Component {
     };
     return(
       <div style={Object.assign(genericStyle, specificStyle)}>
-        <TwoDayL flexLevel="2"/>
-        <ThreeDay flexLevel={sendFlex}/>
-        <TwoDayR flexLevel="2"/>
+        <TwoDayL flexLevel = "2"/>
+        <ThreeDay flexLevel = {sendFlex}/>
+        <TwoDayR flexLevel = "2"/>
       </div>
     );
   }
-}
+});
 
-class TwoWeek extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+var TwoWeek = React.createClass({
+  render: function(){
     var sendFlex = 20 / Math.min(Math.max(40 - zoomLevel, 0), 20);
     var specificStyle = {
       display:"inline-flex",
@@ -129,24 +113,21 @@ class TwoWeek extends React.Component {
     };
     return(
       <div style={Object.assign(genericStyle, specificStyle)}>
-      <OneWeek flexLevel={sendFlex}/>
-      <OneWeek flexLevel="1"/>
+      <OneWeek flexLevel = {sendFlex}/>
+      <OneWeek flexLevel = "1"/>
       </div>
     );
   }
-}
+});
 
-class MainFullView extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    var zoomLevel = this.props.zoomLevel;
+var MainFullView = React.createClass({
+  render: function(){
+
     var sendFlex = 20 / Math.max(20 - zoomLevel,0);
     var mainContainerStyle = {
       padding: 10,
       height: "80vh",
-      width: "100%",
+      width: "vw",
       border: "solid",
       borderColor: "#321",
       borderWidth: 1,
@@ -157,8 +138,8 @@ class MainFullView extends React.Component {
     if (zoomLevel < 20) {
       return (
         <div style={mainContainerStyle}>
-          <TwoWeek flexLevel={sendFlex}/>
-          <TwoWeek flexLevel="1"/>
+          <TwoWeek flexLevel = {sendFlex}/>
+          <TwoWeek flexLevel = "1"/>
         </div>
       );
     } else if (zoomLevel >= 20 && zoomLevel < 40) {
@@ -181,7 +162,7 @@ class MainFullView extends React.Component {
       );
     } else if (zoomLevel >= 80 && zoomLevel < 100) {
       return (
-        <div style={mainContainerStyle}>
+        <div onWheel={this.changeZoom} style={mainContainerStyle}>
           <OneDay/>
         </div>
       );
@@ -193,6 +174,6 @@ class MainFullView extends React.Component {
       );
    }
   }
-}
+});
 
 module.exports = MainFullView;

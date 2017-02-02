@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
 var PageHeader = require('./Header/Header.js');
-var MainFullView = require('./Body/ViewGenerator.js');
+var ViewControl = require('./Body/ViewControl.js');
 
 class App extends Component {
   render() {
     return (
       <div className="App">
         <PageHeader/>
-        <MainFullView/>
+        <ViewControl/>
       </div>
     );
   }
