@@ -1,19 +1,28 @@
 import React from 'react';
 
-var WheelingApp = React.createClass({
-  getInitialState: function() {
-      return {
-          deltaX: 0,
-          deltaY: 0,
-      };
-  },
-  handleMouseWheel: function(e) {
+function ChangeZoomLevel(props) {
+  var deltaY = props.deltaY;
+  console.log(deltaY);
+  return <h1>This is a test.</h1>;
+}
+
+class WheelingApp extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleMouseWheel = this.handleMouseWheel.bind(this);
+    this.state = {
+      deltaX: 0,
+      deltaY: 0,
+    }
+  }
+
+  handleMouseWheel(e) {
       e.preventDefault();
       e.stopPropagation();
       this.setState({deltaX: e.deltaX, deltaY: e.deltaY});
-      console.log('wheel');
-      },
-  render: function() {
+      }
+
+  render() {
   var letterStyle = {
     padding: 10,
     margin: 10,
@@ -22,12 +31,14 @@ var WheelingApp = React.createClass({
     flexDirection: 'column',
     flex: this.state.flexlevel
   };
+
       return (
         <div onWheel={this.handleMouseWheel} style={letterStyle}>
-        X: {this.state.deltaX} Y: {this.state.deltaY}
+          <ChangeZoomLevel deltaY = {this.state.deltaY}/>
+          X: {this.state.deltaX} Y: {this.state.deltaY}
         </div>
       );
     }
-});
+}
 
 module.exports = WheelingApp;
