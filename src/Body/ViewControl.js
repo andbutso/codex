@@ -4,7 +4,7 @@ var zoomLevel = 0;
 
 function ChangeView(props) {
   var deltaY = props.deltaY;
-  zoomLevel = Math.min(Math.max(zoomLevel + deltaY / 5,0),100);
+  zoomLevel = Math.min(Math.max(zoomLevel + deltaY / 10,0),100);
   return <MainFullView zoomLevel = {zoomLevel}/>;
 }
 
