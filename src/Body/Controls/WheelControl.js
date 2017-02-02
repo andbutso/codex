@@ -1,6 +1,6 @@
 import React from 'react';
 
-var ScrollingApp = React.createClass({
+var WheelingApp = React.createClass({
   getInitialState: function() {
       return {
           deltaX: 0,
@@ -30,4 +30,4 @@ var ScrollingApp = React.createClass({
     }
 });
 
-module.exports = ScrollingApp;
+module.exports = WheelingApp;

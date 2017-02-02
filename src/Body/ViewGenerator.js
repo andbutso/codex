@@ -1,6 +1,8 @@
 import React from 'react';
 var FullChassis = require('./Day.js');
-var ScrollingApp = require('./WheelTest.js');
+var ScrollingApp = require('./Controls/ScrollControl.js');
+var WheelingApp = require('./Controls/WheelControl.js');
+var KeyingApp = require('./Controls/KeyControl.js');
 var zoomLevel = 75;
 var genericStyle = {
   height: "100%",
@@ -21,7 +23,7 @@ var OneDay = React.createClass({
     };
     return(
       <div style={Object.assign(genericStyle, specificStyle)}>
-        <ScrollingApp/>
+        <WheelingApp/>
       </div>
     );
   }
