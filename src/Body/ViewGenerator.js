@@ -1,5 +1,6 @@
 import React from 'react';
 var FullChassis = require('./Day.js');
+var ScrollingApp = require('./WheelTest.js');
 var zoomLevel = 75;
 var genericStyle = {
   height: "100%",
@@ -20,7 +21,7 @@ var OneDay = React.createClass({
     };
     return(
       <div style={Object.assign(genericStyle, specificStyle)}>
-        1
+        <ScrollingApp/>
       </div>
     );
   }
@@ -127,6 +128,7 @@ var MainFullView = React.createClass({
       display:"inline-flex",
       flexDirection:'column'
     };
+
     if (zoomLevel < 20) {
       return (
         <div style={mainContainerStyle}>
@@ -154,7 +156,7 @@ var MainFullView = React.createClass({
       );
     } else if (zoomLevel >= 80 && zoomLevel < 100) {
       return (
-        <div style={mainContainerStyle}>
+        <div onWheel={this.changeZoom} style={mainContainerStyle}>
           <OneDay/>
         </div>
       );

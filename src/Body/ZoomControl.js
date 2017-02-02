@@ -1,22 +1,34 @@
-var Swipeable = require('react-swipeable')
+import React from 'react';
 
-var SampleComponent = React.createClass({
-  render: function () {
-    return (
-      <Swipeable
-        onSwiping={this.swiping}
-        onSwipingUp={this.swipingUp}
-        onSwipingRight={this.swipingRight}
-        onSwipingDown={this.swipingDown}
-        onSwipingLeft={this.swipingLeft}
-        onSwiped={this.swiped}
-        onSwipedUp={this.swipedUp}
-        onSwipedRight={this.swipedRight}
-        onSwipedDown={this.swipedDown}
-        onSwipedLeft={this.swipedLeft}
-        onTap={this.tapped} >
-          You can swipe here!
-      </Swipeable>
-    )
-  }
-})
+function() {
+  let style = { transform: 'translateY(0px)' };
+
+  window.addEventListener('scroll', (event) => {
+    let scrollTop = event.srcElement.body.scrollTop,
+        itemTranslate = Math.min(0, scrollTop/3 - 60);
+
+    style.transform = 'translateY(' + itemTranslate + 'px)');
+  });
+
+  return (
+    <div style={style}></div>
+  );
+}
+
+
+componentDidMount: function() {
+    window.addEventListener('scroll', this.handleScroll);
+},
+
+componentWillUnmount: function() {
+    window.removeEventListener('scroll', this.handleScroll);
+},
+
+handleScroll: function(event) {
+    let scrollTop = event.srcElement.body.scrollTop,
+        itemTranslate = Math.min(0, scrollTop/3 - 60);
+
+    this.setState({
+      transform: itemTranslate
+    });
+},
