@@ -10,6 +10,41 @@ class OneWeekView extends React.Component {
       this.setState({active: true});
       }
   render() {
+    if (this.flexLevel < 0.1) {
+      return(
+        <EmptyDiv/>
+      );
+    }
+    else {
+      return(
+        <div style = genericStyle flex = this.flexLevel>
+        {weekArray}
+        </div>
+      )
+    }
+  }
+}
+
+class MainView extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  handleMouseHover(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.setState({active: true});
+      }
+  render() {
+    if (this.flexLeve < 0.1) {
+      return(
+        <EmptyDiv/>
+      );
+    }
+    else {
+      return(
+        {weekArray}
+      )
+    }
   }
 }
 

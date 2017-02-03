@@ -1,5 +1,5 @@
 import React from 'react';
-var MainFullView = require('./ViewGenerator.js');
+var MainFullView = require('./ViewStatic.js');
 var zoomLevel = 0;
 
 function ChangeView(props) {
@@ -26,8 +26,9 @@ class ViewControl extends React.Component {
 
   render() {
   var genericStyle = {
+    margin: 10,
     height: "80vh",
-    width: "100%",
+    width: "vw",
     display:"inline-flex",
     border: "solid",
     borderColor: "#111",
