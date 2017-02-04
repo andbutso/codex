@@ -1,5 +1,7 @@
 import React from 'react';
 
+var focusPoint = 34;
+
 var genericStyle = {
   display:"inline-flex",
   border: "solid",
@@ -13,7 +15,8 @@ class OneDayView extends React.Component {
     this.handleEnter = this.handleEnter.bind(this);
     this.handleExit = this.handleExit.bind(this);
     this.state = {
-      hover: false
+      hover: false,
+      flexLevel: 20
     }
   }
 
@@ -48,12 +51,24 @@ class OneDayView extends React.Component {
 class OneWeekView extends React.Component {
   constructor(props) {
     super(props);
+    this.changeFocusPoint = this.changeFocusPoint.bind(this);
+    this.state = {
+      focusPoint: 34
+    }
   }
+
+  changeFocusPoint(focusPoint) {
+    this.setState({
+      focusPoint: focusPoint
+    });
+   }
 
   render() {
     var weekMatrix = [];
+    var focusPoint = Math.floor(this.state.focusPoint/10);
     var weekIndex = this.props.weekIndex;
-    var flexLevel = this.props.flexLevel;
+    var zoomLevel = this.props.zoomLevel;
+    var flexLevel = 1 / Math.pow((Math.abs(weekIndex-focusPoint)+1),zoomLevel/6);
     var specificStyle = {
       borderColor: 'blue',
       flexDirection:'row',
@@ -63,7 +78,7 @@ class OneWeekView extends React.Component {
       var k = i + weekIndex * 10;
       weekMatrix.push(<
         OneDayView dayIndex={k}
-        changeFocusPoint={this.props.changeFocusPoint}
+        changeFocusPoint={this.changeFocusPoint}
         />);
     }
     return(
@@ -85,14 +100,12 @@ class OneMonthView extends React.Component {
       flex: 1
     };
     var monthMatrix = [];
+    var zoomLevel = this.props.zoomLevel;
     for (var j = 1; j < 6; j++) {
-      var weekFlexArray = this.props.weekFlexArray;
-      if(weekFlexArray[j-1]>0.1){
+      if(1 / Math.pow((Math.abs(j-3)+1),zoomLevel/6)>0.1){
       monthMatrix.push(<OneWeekView
         weekIndex={j}
-        dayFlexArray={this.props.dayFlexArray}
-        changeFocusPoint={this.props.changeFocusPoint}
-        flexLevel={weekFlexArray[j-1]}
+        zoomLevel={this.props.zoomLevel}
         />);
       }
     }

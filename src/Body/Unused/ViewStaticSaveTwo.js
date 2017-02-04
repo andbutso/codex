@@ -13,7 +13,8 @@ class OneDayView extends React.Component {
     this.handleEnter = this.handleEnter.bind(this);
     this.handleExit = this.handleExit.bind(this);
     this.state = {
-      hover: false
+      hover: false,
+      flexLevel: 20
     }
   }
 
@@ -53,11 +54,11 @@ class OneWeekView extends React.Component {
   render() {
     var weekMatrix = [];
     var weekIndex = this.props.weekIndex;
-    var flexLevel = this.props.flexLevel;
+    var weekFlexValue = this.props.weekFlexValue;
     var specificStyle = {
       borderColor: 'blue',
       flexDirection:'row',
-      flex: flexLevel
+      flex: weekFlexValue
     };
     for (var i = 1; i < 8; i++) {
       var k = i + weekIndex * 10;
@@ -77,7 +78,28 @@ class OneWeekView extends React.Component {
 class OneMonthView extends React.Component {
   constructor(props) {
     super(props);
+    this.changeFocusPoint = this.changeFocusPoint.bind(this);
+    this.state = {
+      focusPoint: 34,
+      weekFlexArray: [1,1,1,1,1],
+      dayFlexArray: [1,1,1,1,1,1,1]
+    }
   }
+  changeFocusPoint(focusPoint) {
+    var focusWeek = Math.floor(this.state.focusPoint/10);
+    var weekFlexArray = [];
+    for (var j = 1; j < 6; j++) {
+      var k = Math.round((1 / Math.pow((Math.abs(j-focusWeek)+1),this.props.zoomLevel/6))*1000)/1000;
+      weekFlexArray.push(
+        k
+      );
+      console.log(weekFlexArray);
+    }
+    this.setState({
+      focusPoint: focusPoint,
+      weekFlexArray: weekFlexArray
+    });
+   }
   render() {
     var specificStyle = {
       borderColor: 'green',
@@ -86,13 +108,12 @@ class OneMonthView extends React.Component {
     };
     var monthMatrix = [];
     for (var j = 1; j < 6; j++) {
-      var weekFlexArray = this.props.weekFlexArray;
+      var weekFlexArray=this.state.weekFlexArray;
       if(weekFlexArray[j-1]>0.1){
       monthMatrix.push(<OneWeekView
         weekIndex={j}
-        dayFlexArray={this.props.dayFlexArray}
-        changeFocusPoint={this.props.changeFocusPoint}
-        flexLevel={weekFlexArray[j-1]}
+        weekFlexValue={weekFlexArray[j-1]}
+        changeFocusPoint={this.changeFocusPoint}
         />);
       }
     }
