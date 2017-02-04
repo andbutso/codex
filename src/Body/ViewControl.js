@@ -1,11 +1,11 @@
 import React from 'react';
-var MainFullView = require('./ViewStatic.js');
+var OneMonthView = require('./ViewStatic.js');
 var zoomLevel = 0;
 
 function ChangeView(props) {
   var deltaY = props.deltaY;
-  zoomLevel = Math.min(Math.max(zoomLevel + deltaY / 10,0),100);
-  return <MainFullView zoomLevel = {zoomLevel}/>;
+  zoomLevel = Math.min(Math.max(zoomLevel + deltaY / 2,0));
+  return <OneMonthView zoomLevel={zoomLevel}/>;
 }
 
 class ViewControl extends React.Component {
@@ -37,7 +37,7 @@ class ViewControl extends React.Component {
 
       return (
         <div onWheel={this.handleMouseWheel} style={genericStyle}>
-          <ChangeView deltaY = {this.state.deltaY}/>
+          <ChangeView deltaY={this.state.deltaY}/>
         </div>
       );
     }
