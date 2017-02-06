@@ -3,8 +3,7 @@ import React from 'react';
 var genericStyle = {
   display:"inline-flex",
   border: "solid",
-  backgroundColor: 'orange',
-  padding: 10,
+  backgroundColor: 'grey',
   borderWidth: 1
 };
 
@@ -28,12 +27,11 @@ class OneDayView extends React.Component {
   }
   render() {
     var dayIndex = this.props.dayIndex;
-    var dayFlexLevel = this.props.dayFlexLevel;
     var specificStyle = {
       backgroundColor : this.state.hover ? 'yellow' : '#EEE',
       borderColor: 'red',
       textAlign: 'center',
-      flex: dayFlexLevel
+      flex: 1
     };
     return(
       <div
@@ -53,24 +51,20 @@ class OneWeekView extends React.Component {
   }
 
   render() {
+    var weekMatrix = [];
     var weekIndex = this.props.weekIndex;
-    var weekFlexLevel = this.props.weekFlexLevel;
+    var flexLevel = this.props.flexLevel;
     var specificStyle = {
       borderColor: 'blue',
       flexDirection:'row',
-      flex: weekFlexLevel
+      flex: flexLevel
     };
-    var weekMatrix = [];
     for (var i = 1; i < 8; i++) {
-      var dayFlexArray = this.props.dayFlexArray;
       var k = i + weekIndex * 10;
-      if(dayFlexArray[i-1]>0.1){
-      weekMatrix.push(<OneDayView
-        dayIndex={k}
+      weekMatrix.push(<
+        OneDayView dayIndex={k}
         changeFocusPoint={this.props.changeFocusPoint}
-        dayFlexLevel={dayFlexArray[i-1]}
         />);
-      }
     }
     return(
       <div style={Object.assign(genericStyle, specificStyle)}>
@@ -98,7 +92,7 @@ class OneMonthView extends React.Component {
         weekIndex={j}
         dayFlexArray={this.props.dayFlexArray}
         changeFocusPoint={this.props.changeFocusPoint}
-        weekFlexLevel={weekFlexArray[j-1]}
+        flexLevel={weekFlexArray[j-1]}
         />);
       }
     }
