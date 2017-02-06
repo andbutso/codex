@@ -29,7 +29,7 @@ class ViewControl extends React.Component {
      e.stopPropagation();
      this.setState({deltaX: e.deltaX, deltaY: e.deltaY});
      var zoomLevel = this.state.zoomLevel;
-     zoomLevel = Math.min(Math.max(zoomLevel + this.state.deltaY / 10,0),200);
+     zoomLevel = Math.min(Math.max(zoomLevel + this.state.deltaY / 10,0),350);
      this.setState({zoomLevel: zoomLevel});
      this.generateViewMatrix();
    }
@@ -54,6 +54,30 @@ class ViewControl extends React.Component {
     var weekFlexArray = [];
     var weekFocus = Math.floor(this.state.focusPoint/10);
     var zoomLevel = this.state.zoomLevel;
+    var adjZoomLevel;
+    if(zoomLevel>=0 && zoomLevel<50){
+       adjZoomLevel = zoomLevel;
+    }
+    else if(zoomLevel>=50 && zoomLevel<100){
+      adjZoomLevel = 50;
+    }
+    else if (zoomLevel>=100 && zoomLevel<150) {
+       adjZoomLevel = zoomLevel - 50;
+    }
+    else if (zoomLevel>=150 && zoomLevel<200) {
+       adjZoomLevel = 100;
+    }
+    else if (zoomLevel>=200 && zoomLevel<267) {
+      adjZoomLevel = zoomLevel - 100;
+    }
+    else if (zoomLevel>=267 && zoomLevel<317) {
+       adjZoomLevel = 167;
+    }
+    else {
+      adjZoomLevel = zoomLevel - 150;
+    }
+    zoomLevel = adjZoomLevel;
+    console.log(zoomLevel);
     for (var j = 1; j < 6; j++) {
       var k = 1;
       if(j<weekFocus){
