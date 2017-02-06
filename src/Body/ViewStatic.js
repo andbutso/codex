@@ -1,4 +1,5 @@
 import React from 'react';
+var EventView = require('./Event.js');
 
 var genericStyle = {
   display:"inline-flex",

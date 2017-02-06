@@ -12,7 +12,7 @@ class ViewControl extends React.Component {
       deltaX: 0,
       deltaY: 0,
       zoomLevel: 0,
-      weekFlexArray: [1,1,1,1,1],
+      weekFlexArray: [0.1,1,1,1,1],
       dayFlexArray: [1,1,1,1,1,1,1]
     }
   }
@@ -20,7 +20,9 @@ class ViewControl extends React.Component {
   changeFocusPoint(focusPoint) {
     this.setState({
       focusPoint: focusPoint
-    });
+    },
+    this.sendStateToParent
+    );
     this.generateViewMatrix();
    }
 
@@ -30,7 +32,9 @@ class ViewControl extends React.Component {
      this.setState({deltaX: e.deltaX, deltaY: e.deltaY});
      var zoomLevel = this.state.zoomLevel;
      zoomLevel = Math.min(Math.max(zoomLevel + this.state.deltaY / 10,0),350);
-     this.setState({zoomLevel: zoomLevel});
+     this.setState({zoomLevel: zoomLevel},
+     this.sendStateToParent
+     );
      this.generateViewMatrix();
    }
 
@@ -88,7 +92,8 @@ class ViewControl extends React.Component {
       }
       weekFlexArray.push(k);
     }
-    this.setState({weekFlexArray: weekFlexArray});
+    this.setState({weekFlexArray: weekFlexArray},
+    this.sendStateToParent);
     var dayFlexArray = [];
     var dayFocus = this.state.focusPoint - Math.floor(this.state.focusPoint/10) * 10;
     for (var l = 1; l < 8; l++) {
@@ -101,11 +106,8 @@ class ViewControl extends React.Component {
       }
       dayFlexArray.push(m);
     }
-    this.setState({dayFlexArray: dayFlexArray});
-  }
-
-  componentWillMount() {
-    this.generateViewMatrix();
+    this.setState({dayFlexArray: dayFlexArray},
+    this.sendStateToParent);
   }
 
   render() {
