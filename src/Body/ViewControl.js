@@ -12,7 +12,8 @@ class ViewControl extends React.Component {
       deltaX: 0,
       deltaY: 0,
       zoomLevel: 0,
-      centralDate: 0,
+      swipeLevel: 0,
+      centralDate: new Date(),
       weekFlexArray: [1,1,1,1,1],
       dayFlexArray: [1,1,1,1,1,1,1]
     }
@@ -39,13 +40,30 @@ class ViewControl extends React.Component {
      e.preventDefault();
      e.stopPropagation();
      this.setState({deltaX: e.deltaX, deltaY: e.deltaY});
-
      var zoomLevel = this.state.zoomLevel;
-     zoomLevel = Math.min(Math.max(zoomLevel + this.state.deltaY / 10,0),350);
+     zoomLevel = Math.round(Math.min(Math.max(zoomLevel + this.state.deltaY / 20,0),200));
      this.setState({zoomLevel: zoomLevel});
 
-     var centralDate = this.state.zoomLevel;
+     var currentDate = this.state.centralDate;
+     var swipeLevel = this.state.swipeLevel;
+     const dateOffset = [28,14,7,3,1];
+     swipeLevel = swipeLevel + this.state.deltaX/100;
+     if (Math.abs(swipeLevel) > 1){
+       var span = dateOffset[Math.floor(zoomLevel/50)];
+       var newDate = new Date(currentDate.setDate(currentDate.getDate() + Math.abs(swipeLevel)/swipeLevel*span));
+       this.setState({centralDate: newDate});
+       this.setState({swipeLevel: 0});
+       console.log(zoomLevel);
+       console.log(span);
+     }
+     else {
+       this.setState({swipeLevel: swipeLevel});
+     }
+     this.generateViewMatrix();
+   }
 
+   handleArrows(e) {
+     console.log(test);
      this.generateViewMatrix();
    }
 
@@ -69,29 +87,7 @@ class ViewControl extends React.Component {
     var weekFlexArray = [];
     var weekFocus = Math.floor(this.state.focusPoint/10);
     var zoomLevel = this.state.zoomLevel;
-    var adjZoomLevel;
-    if(zoomLevel>=0 && zoomLevel<50){
-       adjZoomLevel = zoomLevel;
-    }
-    else if(zoomLevel>=50 && zoomLevel<100){
-      adjZoomLevel = 50;
-    }
-    else if (zoomLevel>=100 && zoomLevel<150) {
-       adjZoomLevel = zoomLevel - 50;
-    }
-    else if (zoomLevel>=150 && zoomLevel<200) {
-       adjZoomLevel = 100;
-    }
-    else if (zoomLevel>=200 && zoomLevel<267) {
-      adjZoomLevel = zoomLevel - 100;
-    }
-    else if (zoomLevel>=267 && zoomLevel<317) {
-       adjZoomLevel = 167;
-    }
-    else {
-      adjZoomLevel = zoomLevel - 150;
-    }
-    zoomLevel = adjZoomLevel;
+    var zoomLevel = Math.round(zoomLevel + 50 / (2 * Math.PI) * Math.sin(zoomLevel * 2 * Math.PI / 50 - Math.PI));
     for (var j = 1; j < 6; j++) {
       var k = 1;
       if(j<weekFocus){
@@ -137,7 +133,7 @@ class ViewControl extends React.Component {
     for (var j = 1; j < 6; j++) {
       for (var l = 1; l < 8; l++) {
         var k = 7 * (j - 3) + (l - 1) - (m - 1);
-        var dayDate = new Date();
+        var dayDate = new Date(currentDate);
         dayDate = new Date(dayDate.setDate(dayDate.getDate() + k));
         weekDateArray.push(dayDate);
       }
@@ -145,7 +141,11 @@ class ViewControl extends React.Component {
     }
 
     return (
-      <div onWheel={this.handleMouseWheel} style={genericStyle}>
+      <div
+      onWheel={this.handleMouseWheel}
+      onKeyDown={this.handleArrows}
+      style={genericStyle}
+      >
         <OneMonthView
           changeFocusPoint={this.changeFocusPoint}
           weekFlexArray={this.state.weekFlexArray}
