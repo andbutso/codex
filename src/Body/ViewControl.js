@@ -12,17 +12,26 @@ class ViewControl extends React.Component {
       deltaX: 0,
       deltaY: 0,
       zoomLevel: 0,
-      weekFlexArray: [0.1,1,1,1,1],
+      centralDate: 0,
+      weekFlexArray: [1,1,1,1,1],
       dayFlexArray: [1,1,1,1,1,1,1]
     }
   }
 
+  componentWillMount(){
+    this.setState({
+      centralDate: new Date()
+    });
+   }
+
+   componentDidMount(){
+     console.log(this.state.centralDate);
+    }
+
   changeFocusPoint(focusPoint) {
     this.setState({
       focusPoint: focusPoint
-    },
-    this.sendStateToParent
-    );
+    });
     this.generateViewMatrix();
    }
 
@@ -30,11 +39,13 @@ class ViewControl extends React.Component {
      e.preventDefault();
      e.stopPropagation();
      this.setState({deltaX: e.deltaX, deltaY: e.deltaY});
+
      var zoomLevel = this.state.zoomLevel;
      zoomLevel = Math.min(Math.max(zoomLevel + this.state.deltaY / 10,0),350);
-     this.setState({zoomLevel: zoomLevel},
-     this.sendStateToParent
-     );
+     this.setState({zoomLevel: zoomLevel});
+
+     var centralDate = this.state.zoomLevel;
+
      this.generateViewMatrix();
    }
 
@@ -81,7 +92,6 @@ class ViewControl extends React.Component {
       adjZoomLevel = zoomLevel - 150;
     }
     zoomLevel = adjZoomLevel;
-    console.log(zoomLevel);
     for (var j = 1; j < 6; j++) {
       var k = 1;
       if(j<weekFocus){
@@ -106,8 +116,7 @@ class ViewControl extends React.Component {
       }
       dayFlexArray.push(m);
     }
-    this.setState({dayFlexArray: dayFlexArray},
-    this.sendStateToParent);
+    this.setState({dayFlexArray: dayFlexArray});
   }
 
   render() {
@@ -121,12 +130,27 @@ class ViewControl extends React.Component {
       borderWidth: 1
     };
 
+    var currentDate = this.state.centralDate;
+    var m = currentDate.getDay();
+    var monthDateArray = [];
+    var weekDateArray = [];
+    for (var j = 1; j < 6; j++) {
+      for (var l = 1; l < 8; l++) {
+        var k = 7 * (j - 3) + (l - 1) - (m - 1);
+        var dayDate = new Date();
+        dayDate = new Date(dayDate.setDate(dayDate.getDate() + k));
+        weekDateArray.push(dayDate);
+      }
+      monthDateArray.push(weekDateArray);
+    }
+
     return (
       <div onWheel={this.handleMouseWheel} style={genericStyle}>
         <OneMonthView
           changeFocusPoint={this.changeFocusPoint}
           weekFlexArray={this.state.weekFlexArray}
           dayFlexArray={this.state.dayFlexArray}
+          weekDateArray={weekDateArray}
         />
       </div>
     );

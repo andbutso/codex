@@ -15,7 +15,7 @@ class OneDayView extends React.Component {
     this.handleEnter = this.handleEnter.bind(this);
     this.handleExit = this.handleExit.bind(this);
     this.state = {
-      hover: false
+      hover: false,
     }
   }
 
@@ -27,9 +27,16 @@ class OneDayView extends React.Component {
   handleExit(e) {
      this.setState({hover: false});
   }
+
+  componentWillMount(){
+  }
+
   render() {
     var dayIndex = this.props.dayIndex;
     var dayFlexLevel = this.props.dayFlexLevel;
+    var weekDateArray = this.props.weekDateArray;
+    var dayDate = weekDateArray[(Math.floor(dayIndex/10)-1)*7+dayIndex-1-Math.floor(dayIndex/10)*10];
+    var dayStringDate = dayDate.toString();
     var specificStyle = {
       backgroundColor : this.state.hover ? 'yellow' : '#EEE',
       borderColor: 'red',
@@ -42,7 +49,7 @@ class OneDayView extends React.Component {
         onMouseEnter={this.handleEnter}
         onMouseOut={this.handleExit}
         >
-        {dayIndex}
+        {dayStringDate}
       </div>
     );
   }
@@ -70,6 +77,7 @@ class OneWeekView extends React.Component {
         dayIndex={k}
         changeFocusPoint={this.props.changeFocusPoint}
         dayFlexLevel={dayFlexArray[i-1]}
+        weekDateArray={this.props.weekDateArray}
         />);
       }
     }
@@ -100,6 +108,7 @@ class OneMonthView extends React.Component {
         dayFlexArray={this.props.dayFlexArray}
         changeFocusPoint={this.props.changeFocusPoint}
         weekFlexLevel={weekFlexArray[j-1]}
+        weekDateArray={this.props.weekDateArray}
         />);
       }
     }
