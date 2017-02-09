@@ -1,5 +1,5 @@
 import React from 'react';
-var OneMonthView = require('./ViewStatic.js');
+var OneMonthView = require('./ViewContents.js');
 
 class ViewControl extends React.Component {
   constructor(props) {
