@@ -31,7 +31,6 @@ app.listen(app.get('port'));
 
 app.get('/api/console', (req, res) => {
 	// input value from the form
-	var val = req.query;
 	console.log('someone pushed the button!');
 });
 

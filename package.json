@@ -1,27 +1,4 @@
 {
-<<<<<<< HEAD
-  "name": "my-app",
-  "version": "0.1.0",
-  "private": true,
-  "devDependencies": {
-    "react-scripts": "0.8.5"
-  },
-  "dependencies": {
-    "lodash": "^4.17.4",
-    "mongodb": "^2.2.22",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
-    "react-gesture": "0.0.2-rc.12",
-    "react-swipeable": "^3.9.1",
-    "react-touch": "^0.4.0",
-    "react-touch-events": "^2.0.0"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-=======
   "name": "codex-server",
   "version": "1.0.0",
   "private": true,
@@ -36,6 +13,5 @@
     "concurrently": "^3.2.0"
   },
   "scripts": {
->>>>>>> c4e50d50e0958957bc2cf21896a339259fef26fa
   }
 }
