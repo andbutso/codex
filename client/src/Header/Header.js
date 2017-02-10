@@ -2,7 +2,7 @@ import React from 'react';
 import logo from '../Images/Logo.jpg';
 import userPicture from '../Images/User.jpg';
 
-class LogoBox extends React.component {
+class LogoBox extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -32,7 +32,7 @@ class LogoBox extends React.component {
   }
 }
 
-class SearchBox extends React.component {
+class SearchBox extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -53,7 +53,7 @@ class SearchBox extends React.component {
   }
 }
 
-class UserBox extends React.component {
+class UserBox extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -83,7 +83,7 @@ class UserBox extends React.component {
   }
 }
 
-class PageHeader extends React.component {
+class PageHeader extends React.Component {
   constructor(props) {
     super(props);
   }
