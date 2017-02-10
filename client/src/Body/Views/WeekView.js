@@ -5,7 +5,7 @@ var genericStyle = {
   display:"inline-flex",
   border: "solid",
   backgroundColor: 'orange',
-  padding: 10,
+  margin: 5,
   borderWidth: 1
 };
 
@@ -32,6 +32,8 @@ class OneWeekView extends React.Component {
         changeFocusPoint={this.props.changeFocusPoint}
         dayFlexLevel={dayFlexArray[i-1]}
         weekDateArray={this.props.weekDateArray}
+        zoomLevel={this.props.zoomLevel}
+        weekFlexLevel = {this.props.weekFlexLevel}
         />);
       }
     }

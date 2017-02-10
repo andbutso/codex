@@ -41,7 +41,7 @@ class ViewControl extends React.Component {
      e.stopPropagation();
      this.setState({deltaX: e.deltaX, deltaY: e.deltaY});
      var zoomLevel = this.state.zoomLevel;
-     zoomLevel = Math.round(Math.min(Math.max(zoomLevel + this.state.deltaY / 20,0),200)*100)/100;
+     zoomLevel = Math.round(Math.min(Math.max(zoomLevel + this.state.deltaY / 20,0),200)*1000)/1000;
      this.setState({zoomLevel: zoomLevel});
 
      var currentDate = this.state.centralDate;
@@ -121,6 +121,7 @@ class ViewControl extends React.Component {
       height: "80vh",
       width: "vw",
       display:"inline-flex",
+      flexDirection:"row",
       border: "solid",
       borderColor: "#111",
       borderWidth: 1
@@ -146,10 +147,14 @@ class ViewControl extends React.Component {
       onKeyDown={this.handleArrows}
       style={genericStyle}
       >
+        <div>
+        test
+        </div>
         <OneMonthView
           changeFocusPoint={this.changeFocusPoint}
           weekFlexArray={this.state.weekFlexArray}
           dayFlexArray={this.state.dayFlexArray}
+          zoomLevel={this.state.zoomLevel}
           weekDateArray={weekDateArray}
         />
       </div>

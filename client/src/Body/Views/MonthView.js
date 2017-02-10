@@ -5,7 +5,7 @@ var genericStyle = {
   display:"inline-flex",
   border: "solid",
   backgroundColor: 'orange',
-  padding: 10,
+  margin: 5,
   borderWidth: 1
 };
 
@@ -29,6 +29,7 @@ class OneMonthView extends React.Component {
         changeFocusPoint={this.props.changeFocusPoint}
         weekFlexLevel={weekFlexArray[j-1]}
         weekDateArray={this.props.weekDateArray}
+        zoomLevel={this.props.zoomLevel}
         />);
       }
     }

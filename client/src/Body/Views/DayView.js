@@ -1,11 +1,12 @@
 import React from 'react';
-var Chassis = require('./EventView.js');
+var DayDetailed = require('./EventDetailedView.js');
+var DayOverview = require('./EventOverView.js');
 
 var genericStyle = {
   display:"inline-flex",
   border: "solid",
-  backgroundColor: 'orange',
-  padding: 10,
+  backgroundColor: 'blue',
+  margin: 5,
   borderWidth: 1
 };
 
@@ -37,6 +38,7 @@ class OneDayView extends React.Component {
     var weekDateArray = this.props.weekDateArray;
     var dayDate = weekDateArray[(Math.floor(dayIndex/10)-1)*7+dayIndex-1-Math.floor(dayIndex/10)*10];
     var dayStringDate = dayDate.toString();
+    var weekFlexLevel = this.props.weekFlexLevel;
     var specificStyle = {
       flexDirection:'column',
       backgroundColor : this.state.hover ? 'yellow' : '#EEE',
@@ -48,17 +50,23 @@ class OneDayView extends React.Component {
     var daySpan = [8,20];
     var renderSpan = [];
     var renderChassis = [];
+    var zoomLevel = this.props.zoomLevel;
 
-    renderSpan.push(daySpan[0]);
-    for (var i = 0; i < eventSpan.length; i++) {
-      if (eventSpan[i] > daySpan[0] && eventSpan[i] < daySpan[1]) {
-        renderSpan.push(eventSpan[i]);
+    if (zoomLevel >= 66 && dayFlexLevel >= 0.7 && weekFlexLevel >= 0.9){
+      renderSpan.push(daySpan[0]);
+      for (var i = 0; i < eventSpan.length; i++) {
+        if (eventSpan[i] > daySpan[0] && eventSpan[i] < daySpan[1]) {
+          renderSpan.push(eventSpan[i]);
+        }
+      }
+      renderSpan.push(daySpan[1]);
+      for (var j = 1; j < renderSpan.length; j++) {
+        var k = (renderSpan[j] - renderSpan[j-1]) / (renderSpan[renderSpan.length - 1] - renderSpan[0]);
+        renderChassis.push(<DayDetailed flexValue = {k}/>);
       }
     }
-    renderSpan.push(daySpan[1]);
-    for (var j = 1; j < renderSpan.length; j++) {
-      var k = (renderSpan[j] - renderSpan[j-1]) / (renderSpan[renderSpan.length - 1] - renderSpan[0]);
-      renderChassis.push(<Chassis flexValue = {k}/>);
+    else {
+        renderChassis.push(<DayOverview/>);
     }
 
     return(
