@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
@@ -20,5 +21,21 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+=======
+  "name": "codex-server",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-core": "^6.22.1",
+    "express": "^4.14.1",
+    "mongoose": "^4.8.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.22.1",
+    "concurrently": "^3.2.0"
+  },
+  "scripts": {
+>>>>>>> c4e50d50e0958957bc2cf21896a339259fef26fa
   }
 }
