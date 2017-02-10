@@ -1,12 +1,13 @@
 import React from 'react';
 
-var eventSpan = [7,9,15,16,19,21];
-var daySpan = [8,20];
-var renderSpan = [];
-var renderChassis = [];
+class Chassis extends React.Component {
 
-var Chassis = React.createClass({
-  render: function() {
+  var eventSpan = [7,9,15,16,19,21];
+  var daySpan = [8,20];
+  var renderSpan = [];
+  var renderChassis = [];
+
+  render() {
       var chassisStyle = {
         padding: 5,
         margin: 5,
@@ -23,9 +24,9 @@ var Chassis = React.createClass({
         </div>
       );
     }
-});
+};
 
-var FullChassis = React.createClass({
+class FullChassis extends React.Component {
   render: function() {
     renderSpan.push(daySpan[0]);
     for (var i = 0; i < eventSpan.length; i++) {
@@ -44,6 +45,6 @@ var FullChassis = React.createClass({
       </div>
     );
   }
-});
+};
 
 module.exports = FullChassis;

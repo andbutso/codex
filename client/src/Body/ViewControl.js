@@ -1,5 +1,5 @@
 import React from 'react';
-var OneMonthView = require('./ViewContents.js');
+var OneMonthView = require('./Views/MonthView.js');
 
 class ViewControl extends React.Component {
   constructor(props) {
@@ -41,7 +41,7 @@ class ViewControl extends React.Component {
      e.stopPropagation();
      this.setState({deltaX: e.deltaX, deltaY: e.deltaY});
      var zoomLevel = this.state.zoomLevel;
-     zoomLevel = Math.round(Math.min(Math.max(zoomLevel + this.state.deltaY / 20,0),200));
+     zoomLevel = Math.round(Math.min(Math.max(zoomLevel + this.state.deltaY / 20,0),200)*100)/100;
      this.setState({zoomLevel: zoomLevel});
 
      var currentDate = this.state.centralDate;
