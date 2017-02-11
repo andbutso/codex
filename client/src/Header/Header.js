@@ -94,7 +94,7 @@ class ButtonTest extends React.Component {
   }
 
   sendPoop() {
-    fetch('http://localhost:3000/api/console')
+    fetch('http://localhost:3001/api/console')
   }
 
   render () {
