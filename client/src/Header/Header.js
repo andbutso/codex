@@ -111,4 +111,15 @@ class PageHeader extends React.Component {
   }
 }
 
+class ButtonTest extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render () {
+    return (
+      <button>Send poop</button>
+    );
+  }
+}
+
 module.exports = PageHeader;
