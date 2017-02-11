@@ -46,7 +46,7 @@ class OneDayView extends React.Component {
       textAlign: 'center',
       flex: dayFlexLevel
     };
-    var eventSpan = [7,9,15,16,19,21];
+    var eventSpan = [7,9,15.5,16,19,21];
     var daySpan = [8,20];
     var renderSpan = [];
     var renderChassis = [];

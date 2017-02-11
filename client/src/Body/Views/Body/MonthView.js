@@ -4,7 +4,7 @@ var OneWeekView = require('./WeekView.js');
 var genericStyle = {
   display:"inline-flex",
   border: "solid",
-  backgroundColor: 'orange',
+  backgroundColor: 'blue',
   margin: 5,
   borderWidth: 1
 };

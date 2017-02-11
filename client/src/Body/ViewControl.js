@@ -1,5 +1,6 @@
 import React from 'react';
-var OneMonthView = require('./Views/MonthView.js');
+var OneMonthView = require('./Views/Body/MonthView.js');
+var LeftColumn = require('./Views/LeftColumn/LeftColumn.js');
 
 class ViewControl extends React.Component {
   constructor(props) {
@@ -147,9 +148,13 @@ class ViewControl extends React.Component {
       onKeyDown={this.handleArrows}
       style={genericStyle}
       >
-        <div>
-        test
-        </div>
+      <LeftColumn
+        changeFocusPoint={this.changeFocusPoint}
+        weekFlexArray={this.state.weekFlexArray}
+        dayFlexArray={this.state.dayFlexArray}
+        zoomLevel={this.state.zoomLevel}
+        weekDateArray={weekDateArray}
+      />
         <OneMonthView
           changeFocusPoint={this.changeFocusPoint}
           weekFlexArray={this.state.weekFlexArray}
