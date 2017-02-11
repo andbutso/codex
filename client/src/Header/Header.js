@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from '../Images/Logo.jpg';
 import userPicture from '../Images/User.jpg';
+import Fetch from 'react-fetch';
 
 class LogoBox extends React.Component {
   constructor(props) {
@@ -87,10 +88,19 @@ class ButtonTest extends React.Component {
   constructor(props) {
     super(props);
   }
+
+  componentDidMount() {
+
+  }
+
+  sendPoop() {
+    fetch('http://localhost:3000/api/console')
+  }
+
   render () {
     return (
-      <button>Send poop</button>
-    );
+      <button onClick={this.sendPoop()}>Send poop</button>
+    )
   }
 }
 
