@@ -83,6 +83,17 @@ class UserBox extends React.Component {
   }
 }
 
+class ButtonTest extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render () {
+    return (
+      <button>Send poop</button>
+    );
+  }
+}
+
 class PageHeader extends React.Component {
   constructor(props) {
     super(props);
@@ -104,6 +115,7 @@ class PageHeader extends React.Component {
     return (
       <div style={Object.assign(headerStyle)}>
         <LogoBox/>
+        <ButtonTest/>
         <SearchBox/>
         <UserBox/>
       </div>
@@ -111,15 +123,6 @@ class PageHeader extends React.Component {
   }
 }
 
-class ButtonTest extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render () {
-    return (
-      <button>Send poop</button>
-    );
-  }
-}
+
 
 module.exports = PageHeader;
