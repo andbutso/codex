@@ -1,7 +1,6 @@
 import React from 'react';
 import logo from '../Images/Logo.jpg';
 import userPicture from '../Images/User.jpg';
-import Fetch from 'react-fetch';
 
 class LogoBox extends React.Component {
   constructor(props) {
