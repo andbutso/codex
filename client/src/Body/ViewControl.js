@@ -1,12 +1,14 @@
 import React from 'react';
 var OneMonthView = require('./Views/Body/MonthView.js');
 var LeftColumn = require('./Views/LeftColumn/LeftColumn.js');
+const dateOffset = [28,14,7,3,1];
 
 class ViewControl extends React.Component {
   constructor(props) {
     super(props);
     this.generateViewMatrix = this.generateViewMatrix.bind(this);
     this.handleMouseWheel = this.handleMouseWheel.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.changeFocusPoint = this.changeFocusPoint.bind(this);
     this.state = {
       focusPoint: 34,
@@ -21,20 +23,15 @@ class ViewControl extends React.Component {
   }
 
   componentWillMount(){
-    this.setState({
-      centralDate: new Date()
-    });
    }
 
    componentDidMount(){
-     console.log(this.state.centralDate);
     }
 
   changeFocusPoint(focusPoint) {
     this.setState({
       focusPoint: focusPoint
     });
-    this.generateViewMatrix();
    }
 
    handleMouseWheel(e) {
@@ -47,15 +44,12 @@ class ViewControl extends React.Component {
 
      var currentDate = this.state.centralDate;
      var swipeLevel = this.state.swipeLevel;
-     const dateOffset = [28,14,7,3,1];
      swipeLevel = swipeLevel + this.state.deltaX/100;
      if (Math.abs(swipeLevel) > 1){
-       var span = dateOffset[Math.floor(zoomLevel/50)];
+       var span = dateOffset[Math.floor((zoomLevel+20)/50)];
        var newDate = new Date(currentDate.setDate(currentDate.getDate() + Math.abs(swipeLevel)/swipeLevel*span));
        this.setState({centralDate: newDate});
        this.setState({swipeLevel: 0});
-       console.log(zoomLevel);
-       console.log(span);
      }
      else {
        this.setState({swipeLevel: swipeLevel});
@@ -63,8 +57,32 @@ class ViewControl extends React.Component {
      this.generateViewMatrix();
    }
 
-   handleArrows(e) {
-     console.log(test);
+   handleKeyPress(e) {
+     var currentDate = this.state.centralDate;
+     var zoomLevel = this.state.zoomLevel;
+     var span = dateOffset[Math.floor((zoomLevel+20)/50)];
+
+     switch(e.keyCode){
+       case 38:
+       zoomLevel = Math.min(Math.max(zoomLevel + 5,0),200);
+       this.setState({zoomLevel: zoomLevel});
+       break;
+
+       case 40:
+       zoomLevel = Math.min(Math.max(zoomLevel - 5,0),200);
+       this.setState({zoomLevel: zoomLevel});
+       break;
+
+       case 37:
+       var newDate = new Date(currentDate.setDate(currentDate.getDate() - span));
+       this.setState({centralDate: newDate});
+       break;
+
+       case 39:
+       var newDate = new Date(currentDate.setDate(currentDate.getDate() + span));
+       this.setState({centralDate: newDate});
+       break;
+     }
      this.generateViewMatrix();
    }
 
@@ -99,8 +117,7 @@ class ViewControl extends React.Component {
       }
       weekFlexArray.push(k);
     }
-    this.setState({weekFlexArray: weekFlexArray},
-    this.sendStateToParent);
+    this.setState({weekFlexArray: weekFlexArray});
     var dayFlexArray = [];
     var dayFocus = this.state.focusPoint - Math.floor(this.state.focusPoint/10) * 10;
     for (var l = 1; l < 8; l++) {
@@ -118,7 +135,7 @@ class ViewControl extends React.Component {
 
   render() {
     var genericStyle = {
-      margin: 10,
+      margin: 5,
       height: "80vh",
       width: "vw",
       display:"inline-flex",
@@ -131,8 +148,8 @@ class ViewControl extends React.Component {
     var currentDate = this.state.centralDate;
     var m = currentDate.getDay();
     var monthDateArray = [];
-    var weekDateArray = [];
     for (var j = 1; j < 6; j++) {
+      var weekDateArray = [];
       for (var l = 1; l < 8; l++) {
         var k = 7 * (j - 3) + (l - 1) - (m - 1);
         var dayDate = new Date(currentDate);
@@ -141,26 +158,26 @@ class ViewControl extends React.Component {
       }
       monthDateArray.push(weekDateArray);
     }
+    console.log(monthDateArray[1][1]);
+    var monthArray=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var currentMonth = monthArray[currentDate.getMonth()].concat(" ",currentDate.getFullYear());
 
     return (
       <div
+      tabIndex="0"
       onWheel={this.handleMouseWheel}
-      onKeyDown={this.handleArrows}
+      onKeyDown={this.handleKeyPress}
       style={genericStyle}
       >
-      <LeftColumn
-        changeFocusPoint={this.changeFocusPoint}
-        weekFlexArray={this.state.weekFlexArray}
-        dayFlexArray={this.state.dayFlexArray}
-        zoomLevel={this.state.zoomLevel}
-        weekDateArray={weekDateArray}
-      />
+        <LeftColumn
+          currentMonth={currentMonth}
+        />
         <OneMonthView
           changeFocusPoint={this.changeFocusPoint}
           weekFlexArray={this.state.weekFlexArray}
           dayFlexArray={this.state.dayFlexArray}
           zoomLevel={this.state.zoomLevel}
-          weekDateArray={weekDateArray}
+          monthDateArray={monthDateArray}
         />
       </div>
     );

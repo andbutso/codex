@@ -6,7 +6,6 @@ class DayOverview extends React.Component {
       display:"inline-flex",
       border: "solid",
       backgroundColor: 'red',
-      padding: 1,
       borderWidth: 1,
       flex: 1
     };

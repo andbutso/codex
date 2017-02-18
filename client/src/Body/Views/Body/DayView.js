@@ -5,8 +5,8 @@ var DayOverview = require('./EventOverView.js');
 var genericStyle = {
   display:"inline-flex",
   border: "solid",
-  backgroundColor: 'blue',
   margin: 5,
+  padding: 5,
   borderWidth: 1
 };
 
@@ -35,9 +35,8 @@ class OneDayView extends React.Component {
   render() {
     var dayIndex = this.props.dayIndex;
     var dayFlexLevel = this.props.dayFlexLevel;
-    var weekDateArray = this.props.weekDateArray;
-    var dayDate = weekDateArray[(Math.floor(dayIndex/10)-1)*7+dayIndex-1-Math.floor(dayIndex/10)*10];
-    var dayStringDate = dayDate.toString();
+    var monthDateArray = this.props.monthDateArray;
+    var dayDate = monthDateArray[(Math.floor(dayIndex/10)-1)][dayIndex-1-Math.floor(dayIndex/10)*10];
     var weekFlexLevel = this.props.weekFlexLevel;
     var specificStyle = {
       flexDirection:'column',
@@ -66,8 +65,7 @@ class OneDayView extends React.Component {
       }
     }
     else {
-        renderChassis.push(<DayOverview/>);
-    }
+        renderChassis.push(<DayOverview/>);}
 
     return(
       <div
@@ -75,6 +73,11 @@ class OneDayView extends React.Component {
         onMouseEnter={this.handleEnter}
         onMouseOut={this.handleExit}
         >
+          <div>
+            {dayDate.getDate()}
+            -
+            {dayDate.getMonth()}
+          </div>
         {renderChassis}
       </div>
     );

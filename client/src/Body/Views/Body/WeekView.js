@@ -31,7 +31,7 @@ class OneWeekView extends React.Component {
         dayIndex={k}
         changeFocusPoint={this.props.changeFocusPoint}
         dayFlexLevel={dayFlexArray[i-1]}
-        weekDateArray={this.props.weekDateArray}
+        monthDateArray={this.props.monthDateArray}
         zoomLevel={this.props.zoomLevel}
         weekFlexLevel = {this.props.weekFlexLevel}
         />);
