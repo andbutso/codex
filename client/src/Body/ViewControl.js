@@ -28,6 +28,9 @@ class ViewControl extends React.Component {
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.changeFocusPoint = this.changeFocusPoint.bind(this);
     this.changeDateOffset = this.changeDateOffset.bind(this);
+    this.changeZoomLevel = this.changeZoomLevel.bind(this);
+    this.resetMonthOffsetArray = this.resetMonthOffsetArray.bind(this);
+
     this.state = {
       focusPoint: 34,
       deltaX: 0,
@@ -68,14 +71,13 @@ class ViewControl extends React.Component {
      e.preventDefault();
      e.stopPropagation();
      this.setState({deltaX: e.deltaX, deltaY: e.deltaY});
-     var zoomLevel = this.state.zoomLevel;
-     zoomLevel = Math.round(Math.min(Math.max(zoomLevel + this.state.deltaY / 20,0),200)*1000)/1000;
-     this.setState({zoomLevel: zoomLevel});
+     this.changeZoomLevel(this.state.deltaY / 20);
 
+     var zoomLevel = this.state.zoomLevel;
      var swipeLevel = this.state.swipeLevel;
      swipeLevel = swipeLevel + this.state.deltaX/100;
      if (Math.abs(swipeLevel) > 1){
-       var span = dateOffset[Math.max(Math.floor((zoomLevel+20)/50),4)];
+       var span = dateOffset[Math.min(Math.floor((zoomLevel+20)/50),4)];
        this.changeDateOffset(Math.round(swipeLevel)*span);
        this.setState({swipeLevel: 0});
      }
@@ -92,13 +94,11 @@ class ViewControl extends React.Component {
 
      switch(e.keyCode){
        case 38:
-       zoomLevel = Math.min(Math.max(zoomLevel + 5,0),200);
-       this.setState({zoomLevel: zoomLevel});
+       this.changeZoomLevel(5);
        break;
 
        case 40:
-       zoomLevel = Math.min(Math.max(zoomLevel - 5,0),200);
-       this.setState({zoomLevel: zoomLevel});
+       this.changeZoomLevel(-5);
        break;
 
        case 37:
@@ -110,6 +110,26 @@ class ViewControl extends React.Component {
        break;
      }
      this.generateViewMatrix();
+   }
+
+   changeZoomLevel(zoom){
+     var currentDate = this.state.centralDate;
+     var zoomLevel = this.state.zoomLevel;
+     if (zoomLevel>100 && zoomLevel + zoom <= 100){
+       this.resetMonthOffsetArray();
+     }
+     var span = dateOffset[Math.floor((zoomLevel+20)/50)];
+     zoomLevel = Math.min(Math.max(zoomLevel + zoom,0),200);
+     this.setState({zoomLevel: zoomLevel});
+   }
+
+   resetMonthOffsetArray(){
+     var currentDate = this.state.centralDate;
+     var monthOffsetArray = this.state.monthOffsetArray;
+     var firstDay = new Date(currentDate);
+     firstDay = (new Date(firstDay.setDate(firstDay.getDate()+monthOffsetArray[0][0])).getDay()-1+7)%7;
+     this.changeDateOffset(firstDay);
+     console.log(firstDay);
    }
 
    changeDateOffset(offset){
