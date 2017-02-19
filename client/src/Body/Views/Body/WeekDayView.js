@@ -20,10 +20,11 @@ class WeekDayView extends React.Component {
     var labelMatrix = [];
     for (var i = 1; i < 8; i++) {
       var dayFlexArray = this.props.dayFlexArray;
+      var monthDateArray=this.props.monthDateArray;
       if(dayFlexArray[i-1]>0.1){
       labelMatrix.push(<OneDayLabel
         dayFlexLevel={dayFlexArray[i-1]}
-        weekDay={i}
+        weekDay={monthDateArray[0][i-1].getDay()-1}
         />);
       }
     }

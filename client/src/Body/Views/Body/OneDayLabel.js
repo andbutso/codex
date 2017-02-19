@@ -22,7 +22,7 @@ class OneDayLabel extends React.Component {
       <div
         style={Object.assign(genericStyle, specificStyle)}
         >
-          {dayArray[weekDay-1]}
+          {dayArray[(weekDay+7)%7]}
       </div>
     );
   }

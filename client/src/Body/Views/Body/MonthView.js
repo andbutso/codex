@@ -21,6 +21,7 @@ class OneMonthView extends React.Component {
     var monthMatrix = [];
     monthMatrix.push(<WeekDayView
       dayFlexArray={this.props.dayFlexArray}
+      monthDateArray={this.props.monthDateArray}      
     />);
 
     for (var j = 1; j < 6; j++) {
