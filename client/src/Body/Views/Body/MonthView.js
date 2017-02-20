@@ -1,6 +1,6 @@
 import React from 'react';
 var OneWeekView = require('./WeekView.js');
-var WeekDayView = require('./WeekDayView.js');
+var WeekDayView = require('./Labels/WeekDayView.js');
 
 var genericStyle = {
   display:"inline-flex",
@@ -21,7 +21,7 @@ class OneMonthView extends React.Component {
     var monthMatrix = [];
     monthMatrix.push(<WeekDayView
       dayFlexArray={this.props.dayFlexArray}
-      monthDateArray={this.props.monthDateArray}      
+      monthDateArray={this.props.monthDateArray}
     />);
 
     for (var j = 1; j < 6; j++) {

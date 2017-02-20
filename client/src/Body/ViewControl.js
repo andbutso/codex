@@ -25,11 +25,14 @@ class ViewControl extends React.Component {
     super(props);
     this.generateViewMatrix = this.generateViewMatrix.bind(this);
     this.handleMouseWheel = this.handleMouseWheel.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.changeDaySpan = this.changeDaySpan.bind(this);
     this.changeFocusPoint = this.changeFocusPoint.bind(this);
     this.changeDateOffset = this.changeDateOffset.bind(this);
     this.changeZoomLevel = this.changeZoomLevel.bind(this);
     this.resetMonthOffsetArray = this.resetMonthOffsetArray.bind(this);
+    this.updateStates = this.updateStates.bind(this);
 
     this.state = {
       focusPoint: 34,
@@ -40,7 +43,9 @@ class ViewControl extends React.Component {
       centralDate: new Date(),
       weekFlexArray: [1,1,1,1,1],
       dayFlexArray: [1,1,1,1,1,1,1],
-      monthOffsetArray: []
+      monthOffsetArray: [],
+      spanMode: false,
+      dayRange: [8,20]
     }
   }
 
@@ -58,16 +63,13 @@ class ViewControl extends React.Component {
     this.setState({monthOffsetArray: monthOffsetArray});
   }
 
-  componentDidMount(){
-  }
-
   changeFocusPoint(focusPoint) {
     this.setState({
       focusPoint: focusPoint
     });
-   }
+  }
 
-   handleMouseWheel(e) {
+  handleMouseWheel(e) {
      e.preventDefault();
      e.stopPropagation();
      this.setState({deltaX: e.deltaX, deltaY: e.deltaY});
@@ -85,54 +87,74 @@ class ViewControl extends React.Component {
        this.setState({swipeLevel: swipeLevel});
      }
      this.generateViewMatrix();
-   }
+  }
 
-   handleKeyPress(e) {
+  handleKeyDown(e) {
      var currentDate = this.state.centralDate;
      var zoomLevel = this.state.zoomLevel;
      var span = dateOffset[Math.floor((zoomLevel+20)/50)];
+     var spanMode = this.state.spanMode;
 
      switch(e.keyCode){
+       case 18:
+       spanMode = true;
+       this.setState({spanMode: spanMode});
+       break;
        case 38:
        this.changeZoomLevel(5);
        break;
-
        case 40:
        this.changeZoomLevel(-5);
        break;
-
        case 37:
        this.changeDateOffset(-span);
        break;
-
        case 39:
        this.changeDateOffset(span);
        break;
      }
      this.generateViewMatrix();
-   }
+  }
 
-   changeZoomLevel(zoom){
-     var currentDate = this.state.centralDate;
-     var zoomLevel = this.state.zoomLevel;
-     if (zoomLevel>100 && zoomLevel + zoom <= 100){
+  updateStates(){
+    this.forceUpdate;
+  }
+
+  handleKeyUp(e){
+     var spanMode = this.state.spanMode;
+     if(e.keyCode=18){
+     spanMode = false;
+     this.setState({spanMode: spanMode});
+     console.log(spanMode);
+     }
+  }
+
+  changeZoomLevel(zoom){
+     if (this.state.zoomLevel>100 && this.state.zoomLevel + zoom <= 100){
        this.resetMonthOffsetArray();
      }
-     var span = dateOffset[Math.floor((zoomLevel+20)/50)];
-     zoomLevel = Math.min(Math.max(zoomLevel + zoom,0),200);
-     this.setState({zoomLevel: zoomLevel});
-   }
+     this.setState((prevState, props) => ({
+       zoomLevel: Math.min(Math.max(prevState.zoomLevel + zoom,0),200)
+      }));
+  }
 
-   resetMonthOffsetArray(){
+  changeDaySpan(span){
+     var dayRange = this.state.dayRange;
+     dayRange[0]=dayRange[0]+span;
+     dayRange[1]=dayRange[1]+span;
+     this.setState({dayRange: dayRange});
+     console.log(dayRange);
+  }
+
+  resetMonthOffsetArray(){
      var currentDate = this.state.centralDate;
      var monthOffsetArray = this.state.monthOffsetArray;
      var firstDay = new Date(currentDate);
      firstDay = (new Date(firstDay.setDate(firstDay.getDate()+monthOffsetArray[0][0])).getDay()-1+7)%7;
-     this.changeDateOffset(firstDay);
-     console.log(firstDay);
-   }
+     this.changeDateOffset(-firstDay);
+  }
 
-   changeDateOffset(offset){
+  changeDateOffset(offset){
      var monthOffsetArray = this.state.monthOffsetArray;
      for (var j = 1; j < 6; j++) {
        for (var l = 1; l < 8; l++) {
@@ -141,91 +163,93 @@ class ViewControl extends React.Component {
      }
      this.setState({monthOffsetArray: monthOffsetArray});
      this.generateViewMatrix();
-   }
+  }
 
   generateViewMatrix() {
-    var weekFlexArray = [];
-    var weekFocus = Math.floor(this.state.focusPoint/10);
-    var zoomLevel = this.state.zoomLevel;
-    var zoomLevel = Math.round(zoomLevel + 50 / (2 * Math.PI) * Math.sin(zoomLevel * 2 * Math.PI / 50 - Math.PI));
-    for (var j = 1; j < 6; j++) {
-      var k = 1;
-      if(j<weekFocus){
-        k = 1 / ((Math.max(Math.min(zoomLevel,zoomArray[j+1-1][weekFocus-1]),zoomArray[j-1][weekFocus-1])-zoomArray[j-1][weekFocus-1])/(zoomArray[j+1-1][weekFocus-1]-zoomArray[j-1][weekFocus-1])*(10-1)+1);
+      var weekFlexArray = [];
+      var weekFocus = Math.floor(this.state.focusPoint/10);
+      var zoomLevel = this.state.zoomLevel;
+      var zoomLevel = Math.round(zoomLevel + 50 / (2 * Math.PI) * Math.sin(zoomLevel * 2 * Math.PI / 50 - Math.PI));
+      for (var j = 1; j < 6; j++) {
+        var k = 1;
+        if(j<weekFocus){
+          k = 1 / ((Math.max(Math.min(zoomLevel,zoomArray[j+1-1][weekFocus-1]),zoomArray[j-1][weekFocus-1])-zoomArray[j-1][weekFocus-1])/(zoomArray[j+1-1][weekFocus-1]-zoomArray[j-1][weekFocus-1])*(10-1)+1);
+        }
+        else if (j>weekFocus) {
+          k = 1 / ((Math.max(Math.min(zoomLevel,zoomArray[j-1-1][weekFocus-1]),zoomArray[j-1][weekFocus-1])-zoomArray[j-1][weekFocus-1])/(zoomArray[j-1-1][weekFocus-1]-zoomArray[j-1][weekFocus-1])*(10-1)+1);
+        }
+        weekFlexArray.push(k);
       }
-      else if (j>weekFocus) {
-        k = 1 / ((Math.max(Math.min(zoomLevel,zoomArray[j-1-1][weekFocus-1]),zoomArray[j-1][weekFocus-1])-zoomArray[j-1][weekFocus-1])/(zoomArray[j-1-1][weekFocus-1]-zoomArray[j-1][weekFocus-1])*(10-1)+1);
+      this.setState({weekFlexArray: weekFlexArray});
+      var dayFlexArray = [];
+      var dayFocus = this.state.focusPoint - Math.floor(this.state.focusPoint/10) * 10;
+      for (var l = 1; l < 8; l++) {
+        var m = 1;
+        if(l<dayFocus){
+          m = 1 / ((Math.max(Math.min(zoomLevel,dZoomArray[l+1-1][dayFocus-1]),dZoomArray[l-1][dayFocus-1])-dZoomArray[l-1][dayFocus-1])/(dZoomArray[l+1-1][dayFocus-1]-dZoomArray[l-1][dayFocus-1])*(10-1)+1);
+        }
+        else if (l>dayFocus) {
+          m = 1 / ((Math.max(Math.min(zoomLevel,dZoomArray[l-1-1][dayFocus-1]),dZoomArray[l-1][dayFocus-1])-dZoomArray[l-1][dayFocus-1])/(dZoomArray[l-1-1][dayFocus-1]-dZoomArray[l-1][dayFocus-1])*(10-1)+1);
+        }
+        dayFlexArray.push(m);
       }
-      weekFlexArray.push(k);
-    }
-    this.setState({weekFlexArray: weekFlexArray});
-    var dayFlexArray = [];
-    var dayFocus = this.state.focusPoint - Math.floor(this.state.focusPoint/10) * 10;
-    for (var l = 1; l < 8; l++) {
-      var m = 1;
-      if(l<dayFocus){
-        m = 1 / ((Math.max(Math.min(zoomLevel,dZoomArray[l+1-1][dayFocus-1]),dZoomArray[l-1][dayFocus-1])-dZoomArray[l-1][dayFocus-1])/(dZoomArray[l+1-1][dayFocus-1]-dZoomArray[l-1][dayFocus-1])*(10-1)+1);
-      }
-      else if (l>dayFocus) {
-        m = 1 / ((Math.max(Math.min(zoomLevel,dZoomArray[l-1-1][dayFocus-1]),dZoomArray[l-1][dayFocus-1])-dZoomArray[l-1][dayFocus-1])/(dZoomArray[l-1-1][dayFocus-1]-dZoomArray[l-1][dayFocus-1])*(10-1)+1);
-      }
-      dayFlexArray.push(m);
-    }
-    this.setState({dayFlexArray: dayFlexArray});
+      this.setState({dayFlexArray: dayFlexArray});
   }
 
   generateDateMatrix() {
   }
 
   render() {
-    var genericStyle = {
-      margin: 5,
-      height: "80vh",
-      width: "vw",
-      display:"inline-flex",
-      flexDirection:"row",
-      border: "solid",
-      borderColor: "#111",
-      borderWidth: 1
-    };
+      var genericStyle = {
+        margin: 5,
+        height: "80vh",
+        width: "vw",
+        display:"inline-flex",
+        flexDirection:"row",
+        border: "solid",
+        borderColor: "#111",
+        borderWidth: 1
+      };
 
-    var currentDate = this.state.centralDate;
-    var m = currentDate.getDay();
-    var monthDateArray = [];
-    var monthOffsetArray = this.state.monthOffsetArray;
-    for (var j = 1; j < 6; j++) {
-      var weekDateArray = [];
-      for (var l = 1; l < 8; l++) {
-        var dayDate = new Date(currentDate);
-        dayDate = new Date(dayDate.setDate(dayDate.getDate()+monthOffsetArray[j-1][l-1]));
-        weekDateArray.push(dayDate);
+      var currentDate = this.state.centralDate;
+      var m = currentDate.getDay();
+      var monthDateArray = [];
+      var monthOffsetArray = this.state.monthOffsetArray;
+
+      for (var j = 1; j < 6; j++) {
+        var weekDateArray = [];
+        for (var l = 1; l < 8; l++) {
+          var dayDate = new Date(currentDate);
+          dayDate = new Date(dayDate.setDate(dayDate.getDate()+monthOffsetArray[j-1][l-1]));
+          weekDateArray.push(dayDate);
+        }
+        monthDateArray.push(weekDateArray);
       }
-      monthDateArray.push(weekDateArray);
-    }
-    var focusPoint = this.state.focusPoint;
-    var focusDate = new Date(monthDateArray[Math.floor(focusPoint/10)-1][focusPoint - Math.floor(focusPoint/10) * 10-1]);
-    var currentMonth = monthArray[focusDate.getMonth()].concat(" ",focusDate.getFullYear());
+      var focusPoint = this.state.focusPoint;
+      var focusDate = new Date(monthDateArray[Math.floor(focusPoint/10)-1][focusPoint - Math.floor(focusPoint/10) * 10-1]);
+      var currentMonth = monthArray[focusDate.getMonth()].concat(" ",focusDate.getFullYear());
 
-    return (
-      <div
-      tabIndex="0"
-      onWheel={this.handleMouseWheel}
-      onKeyDown={this.handleKeyPress}
-      style={genericStyle}
-      >
-        <LeftColumn
-          currentMonth={currentMonth}
-        />
-        <OneMonthView
-          changeFocusPoint={this.changeFocusPoint}
-          weekFlexArray={this.state.weekFlexArray}
-          dayFlexArray={this.state.dayFlexArray}
-          zoomLevel={this.state.zoomLevel}
-          monthDateArray={monthDateArray}
-        />
-      </div>
-    );
-    }
-}
+      return (
+        <div
+        tabIndex="0"
+        onWheel={this.handleMouseWheel}
+        onKeyDown={this.handleKeyDown}
+        onKeyUp={this.handleKeyUp}
+        style={genericStyle}
+        >
+          <LeftColumn
+            currentMonth={currentMonth}
+          />
+          <OneMonthView
+            changeFocusPoint={this.changeFocusPoint}
+            weekFlexArray={this.state.weekFlexArray}
+            dayFlexArray={this.state.dayFlexArray}
+            zoomLevel={this.state.zoomLevel}
+            monthDateArray={monthDateArray}
+          />
+        </div>
+      );
+      }
+  }
 
 module.exports = ViewControl;

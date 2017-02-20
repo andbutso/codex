@@ -1,6 +1,6 @@
 import React from 'react';
-var DayDetailed = require('./EventDetailedView.js');
-var DayOverview = require('./EventOverView.js');
+var DayDetailed = require('./Events/EventDetailedView.js');
+var DayOverview = require('./Events/EventOverView.js');
 
 var genericStyle = {
   display:"inline-flex",
@@ -17,26 +17,29 @@ class OneDayView extends React.Component {
     this.handleExit = this.handleExit.bind(this);
     this.state = {
       hover: false,
+      dayDate: new Date()
     }
   }
+
+  componentWillMount(){
+
+    {/*Using dayDate, acess database and retreive events for the day*/}
+    }
 
   handleEnter(e) {
     var dayIndex = this.props.dayIndex;
     this.props.changeFocusPoint(dayIndex);
-    this.setState({hover: true});
+    this.setState({hover: true},this.forceUpdate());
   }
   handleExit(e) {
-     this.setState({hover: false});
-  }
-
-  componentWillMount(){
+     this.setState({hover: false},this.forceUpdate());
   }
 
   render() {
     var dayIndex = this.props.dayIndex;
-    var dayFlexLevel = this.props.dayFlexLevel;
     var monthDateArray = this.props.monthDateArray;
     var dayDate = monthDateArray[(Math.floor(dayIndex/10)-1)][dayIndex-1-Math.floor(dayIndex/10)*10];
+    var dayFlexLevel = this.props.dayFlexLevel;
     var weekFlexLevel = this.props.weekFlexLevel;
     var specificStyle = {
       flexDirection:'column',
@@ -77,6 +80,8 @@ class OneDayView extends React.Component {
             {dayDate.getDate()}
             -
             {dayDate.getMonth()}
+            -
+            {daySpan}
           </div>
         {renderChassis}
       </div>
